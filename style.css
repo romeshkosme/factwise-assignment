@@ -1,0 +1,210 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+.wrapper {
+    max-width: 500px;
+    margin: auto;
+    padding: 20px 0px;
+}
+
+input, select, textarea {
+    outline: none;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* SEARCH */
+.search-input-group {
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.search-input-group input {
+    border: 0px;
+    outline: none;
+    height: 35px;
+    width: 100%;
+}
+
+/* ACCORDION */
+.actors-list-group {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.actor-list-item {
+    border: 1px solid lightgray;
+    /* height: 45px; */
+    border-radius: 5px;
+}
+
+.accordion-header {
+    height: 100%;
+    padding: 8px 8px 8px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: 0.4s;
+}
+
+.image-name-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile-pic-wrapper img {
+    border-radius: 50%;
+}
+
+.input-name {
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    height: 25px;
+    padding: 0px 5px;
+}
+
+.expand-less-icon {
+    display: flex;
+    align-items: center;
+}
+
+.accordion-body {
+    max-height: 0px;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+.active {
+    max-height: 214px;
+}
+
+.actor-info-row {
+    margin: 8px;
+    display: flex;
+    gap: 5px
+}
+
+.input-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group input,textarea,select {
+    border: 1px solid lightgray;
+    border-radius: 5px;
+}
+
+.input-row-one input {
+    height: 25px;
+    padding: 0px 4px
+}
+
+.input-row-one select {
+    height: 100%;
+}
+
+.input-row-two {
+    margin-top: 5px;
+}
+
+textarea {
+    padding: 4px;
+}
+
+/* TEXTAREA SCROLL */
+/* width */
+textarea::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+textarea::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+textarea::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+textarea::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+.action-icon-group {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    padding-top: 3px;
+}
+
+.action-icon-group span {
+    cursor: pointer;
+}
+
+/* MODAL */
+.modal-backdrop {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    width: 400px;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.btn {
+    border-radius: 5px;
+    padding: 4px 8px;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background-color: #fff;
+    border: 2px solid gray;
+    color: gray;
+}
+
+.delete-btn {
+    background-color: red;
+    color: white;
+    border: 2px solid red;
+}
