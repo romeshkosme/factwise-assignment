@@ -5,17 +5,18 @@ import { useState } from "react";
 import Modal from "./Modal";
 import Actor from "./Actor";
 import { calculateAge } from "../utils/util";
+import toast from "react-hot-toast";
 
 function ActorsList({actors, deleteActor, editActor}) {
     const [deleteModal, setDeleteModal] = useState(null);
     const [currentIndex, setCurrentIndex] = useState(null);
     const [edit, setEdit] = useState(null);
 
-    const onHandleDelete = (id) => {
-        setDeleteModal(id);
-    }
-
     const onHandleToggleAccordion = (index) => {
+        if (edit) {
+            toast.error("Cannot toggle while in edit mode.")
+            return;
+        }
         setCurrentIndex(currentIndex === index ? null : index);
         setEdit(null);
     }
@@ -26,6 +27,10 @@ function ActorsList({actors, deleteActor, editActor}) {
             return;
         }
         payload["age"] = calculateAge(payload["dob"]);
+        if (payload.age < 18) {
+            toast.error("Permission denied!")
+            return;
+        }
         payload["edited"] = false;
         payload["name"] = `${payload.first} ${payload.last}`;
         setEdit(payload);

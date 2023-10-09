@@ -6,7 +6,7 @@ import CANCELICON from "../assets/cancel.svg";
 import CHECKICON from "../assets/check.svg";
 import toast from 'react-hot-toast';
 
-function Actor({actor, edit, index, onChangeEdit, onHandleEditMode, onHandleSubmit, setDeleteModal, onHandleChangeForm}) {
+function Actor({actor, edit, onChangeEdit, onHandleEditMode, onHandleSubmit, setDeleteModal, onHandleChangeForm}) {
 
     const onHandleSave = () => {
         if (!validate(edit)) return;
@@ -35,7 +35,7 @@ function Actor({actor, edit, index, onChangeEdit, onHandleEditMode, onHandleSubm
         <>
             <div className="actor-info-row input-row-one">
                 <div className="input-group">
-                    <label htmlFor={`age-${actor.id}`}>Age</label>
+                    <p className={`label age-${actor.id}`}>Age</p>
                     {edit?.id === actor.id ? <input
                         name={`age-${actor.id}`}
                         id={`age-${actor.id}`}
@@ -45,7 +45,7 @@ function Actor({actor, edit, index, onChangeEdit, onHandleEditMode, onHandleSubm
                     /> : <p>{`${calculateAge(actor.dob)} years`}</p>}
                 </div>
                 <div className="input-group">
-                    <label htmlFor={`gender-${actor.id}`}>Gender</label>
+                    <p className={`label gender-${actor.id}`}>Gender</p>
                     {edit?.id === actor.id ? <select
                         id={`gender-${actor.id}`}
                         name={`gender-${actor.id}`}
@@ -62,10 +62,10 @@ function Actor({actor, edit, index, onChangeEdit, onHandleEditMode, onHandleSubm
                                 </option>
                             ))
                         }
-                    </select> : <p>{actor.gender}</p>}
+                    </select> : <p>{`${actor.gender[0].toUpperCase()}${actor.gender.slice(1)}`}</p>}
                 </div>
                 <div className="input-group">
-                    <label htmlFor={`country-${actor.id}`}>Country</label>
+                    <p className={`label country-${actor.id}`}>Country</p>
                     {edit?.id === actor.id ? <input
                         id={`country-${actor.id}`}
                         name={`country-${actor.id}`}
@@ -78,7 +78,7 @@ function Actor({actor, edit, index, onChangeEdit, onHandleEditMode, onHandleSubm
             </div>
             <div className="actor-info-row input-row-two">
                 <div className="input-group">
-                    <label htmlFor={`description-${actor.id}`}>Description</label>
+                    <p className={`label description-${actor.id}`}>Description</p>
                     {edit?.id === actor.id ? <textarea
                         id={`description-${actor.id}`}
                         name={`description-${actor.id}`}
