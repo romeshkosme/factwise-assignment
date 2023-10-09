@@ -4,6 +4,7 @@ import UPICON from "../assets/up.svg";
 import { useState } from "react";
 import Modal from "./Modal";
 import Actor from "./Actor";
+import { calculateAge } from "../utils/util";
 
 function ActorsList({actors, deleteActor, editActor}) {
     const [deleteModal, setDeleteModal] = useState(null);
@@ -19,8 +20,25 @@ function ActorsList({actors, deleteActor, editActor}) {
         setEdit(null);
     }
 
-    const onHandleEditMode = (index) => {
-        setEdit(index);
+    const onHandleEditMode = (payload) => {
+        if (payload === null) {
+            setEdit(null);
+            return;
+        }
+        payload["age"] = calculateAge(payload["dob"]);
+        payload["edited"] = false;
+        payload["name"] = `${payload.first} ${payload.last}`;
+        setEdit(payload);
+    }
+
+    const onHandleChangeForm = (e) => {
+        const {name, value} = e.target;
+
+        setEdit(prev => ({
+            ...prev,
+            edited: true,
+            [name.split("-")[0]]: value
+        }));
     }
 
     return (
@@ -33,15 +51,21 @@ function ActorsList({actors, deleteActor, editActor}) {
                             className="actor-list-item"
                         >
                             <div className="accordion-header">
-                                <div class="image-name-group">
+                                <div className="image-name-group">
                                     <span className="profile-pic-wrapper">
                                         <img
                                             src={actor.picture}
                                             alt={`${actor.first} picture`}
                                         />
                                     </span>
-                                    {edit === index ? 
-                                        <input name={`name-${actor.id}`} id={`${actor.id}`} className="input-name" value={`${actor.first} ${actor.last}`} /> :
+                                    {edit?.id === actor.id ? 
+                                        <input
+                                            name={`name-${actor.id}`}
+                                            id={`name-${actor.id}`}
+                                            className="input-name"
+                                            value={edit.name} 
+                                            onChange={onHandleChangeForm}
+                                        /> :
                                         <h3>{actor.first} {actor.last}</h3>
                                     }
                                 </div>
@@ -55,12 +79,14 @@ function ActorsList({actors, deleteActor, editActor}) {
                             </div>
                             <div className={`accordion-body ${currentIndex === index ? "active" : ""}`}>
                                 <Actor
-                                    data={actor}
+                                    actor={actor}
                                     edit={edit}
                                     index={index}
+                                    onChangeEdit={setEdit}
                                     onHandleEditMode={onHandleEditMode}
                                     onHandleSubmit={editActor}
                                     setDeleteModal={setDeleteModal}
+                                    onHandleChangeForm={onHandleChangeForm}
                                 />
                             </div>
                         </div>

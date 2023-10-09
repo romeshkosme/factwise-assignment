@@ -1,40 +1,76 @@
-import { useState } from "react";
-import { calculateAge } from "../utils/util";
+import { useEffect, useState } from "react";
+import { calculateAge, calculateDob } from "../utils/util";
 import { GENDERS } from "../utils/Constant";
 import DELETEICON from "../assets/delete.svg";
 import EDITICON from "../assets/edit.svg";
 import CANCELICON from "../assets/cancel.svg";
 import CHECKICON from "../assets/check.svg";
+import toast from 'react-hot-toast';
 
-function Actor({data, edit, index, onHandleEditMode, onHandleSubmit, setDeleteModal}) {
-    const [actor, setActor] = useState(data);
-    
-    const onHandleChangeForm = (e) => {
-        const {name, value} = e.target;
-        setActor(prev => ({
-            ...prev,
-            [name.split("-")[0]]: value
-        }));
+function Actor({actor, edit, index, onChangeEdit, onHandleEditMode, onHandleSubmit, setDeleteModal, onHandleChangeForm}) {
+
+    const onHandleSave = () => {
+        if (edit.edited) {
+            const payload = {...edit};
+            const {name} = payload;
+            
+            payload["first"] = name.split(" ")[0];
+            payload["last"] = name.split(" ").slice(1).join(" ");
+            payload["dob"] = calculateDob(payload["age"]);
+
+            delete payload["age"];
+            delete payload["edited"];
+            delete payload["name"];
+
+            // console.log("payload - ", payload)
+
+            onHandleSubmit(payload.id, payload);
+            onChangeEdit(null);
+            toast.success("Edited successfully!")
+
+        } else {
+            toast.error("Nothing edited!")
+        }
+    }
+
+    const validate = () => {
+        console.log("age - ", actor)
+        // NAME
+        if (!actor?.name || !new RegExp(/^[a-zA-Z\s]*$/).test(actor["name"])) {
+            console.log("name required or invalid")
+        }
+        // AGE
+        if (!actor["age"] || !(new RegExp(/^\d+$/).test(actor["age"]))) {
+            console.log("invlid age");
+        }
+        // country
+        if (!actor["country"] || !new RegExp(/^[a-zA-Z\s]*$/).test(actor["country"])) {
+            console.log("invalid country");
+        }
+        // description
+        if (!actor["description"]) {
+            console.log("description required");
+        }
     }
     return (
         <>
             <div className="actor-info-row input-row-one">
                 <div className="input-group">
                     <label htmlFor={`age-${actor.id}`}>Age</label>
-                    {edit === index ? <input
+                    {edit?.id === actor.id ? <input
                         name={`age-${actor.id}`}
                         id={`age-${actor.id}`}
                         placeholder="Age"
-                        value={calculateAge(actor.dob)}
+                        value={edit.age}
                         onChange={onHandleChangeForm}
-                    /> : <p>{calculateAge(actor.dob)}</p>}
+                    /> : <p>{`${calculateAge(actor.dob)} years`}</p>}
                 </div>
                 <div className="input-group">
                     <label htmlFor={`gender-${actor.id}`}>Gender</label>
-                    {edit === index ? <select
+                    {edit?.id === actor.id ? <select
                         id={`gender-${actor.id}`}
                         name={`gender-${actor.id}`}
-                        value={actor.gender}
+                        value={edit.gender}
                         onChange={onHandleChangeForm}
                     >
                         {
@@ -51,10 +87,10 @@ function Actor({data, edit, index, onHandleEditMode, onHandleSubmit, setDeleteMo
                 </div>
                 <div className="input-group">
                     <label htmlFor={`country-${actor.id}`}>Country</label>
-                    {edit === index ? <input
+                    {edit?.id === actor.id ? <input
                         id={`country-${actor.id}`}
                         name={`country-${actor.id}`}
-                        value={actor.country}
+                        value={edit.country}
                         onChange={onHandleChangeForm}
                     /> : 
                     <p>{actor.country}</p>
@@ -64,11 +100,11 @@ function Actor({data, edit, index, onHandleEditMode, onHandleSubmit, setDeleteMo
             <div className="actor-info-row input-row-two">
                 <div className="input-group">
                     <label htmlFor={`description-${actor.id}`}>Description</label>
-                    {edit === index ? <textarea
+                    {edit?.id === actor.id ? <textarea
                         id={`description-${actor.id}`}
                         name={`description-${actor.id}`}
                         rows={5}
-                        value={actor.description}
+                        value={edit.description}
                         onChange={onHandleChangeForm}
                     /> :
                     <p>{actor.description}</p>
@@ -87,7 +123,7 @@ function Actor({data, edit, index, onHandleEditMode, onHandleSubmit, setDeleteMo
                             />
                         </span>
                         <span
-                            onClick={() => onHandleEditMode(index)}
+                            onClick={() => onHandleEditMode(actor)}
                         >
                             <img
                                 src={EDITICON}
@@ -97,7 +133,7 @@ function Actor({data, edit, index, onHandleEditMode, onHandleSubmit, setDeleteMo
                     </>
                 )}
                 {
-                    edit === index && (
+                    edit?.id === actor.id && (
                     <>
                         <span
                             onClick={() => onHandleEditMode(null)}
@@ -108,10 +144,7 @@ function Actor({data, edit, index, onHandleEditMode, onHandleSubmit, setDeleteMo
                             />
                         </span>
                         <span
-                            onClick={() => {
-                                onHandleSubmit(actor.id, actor);
-                                onHandleEditMode(null);
-                            }}
+                            onClick={onHandleSave}
                         >
                             <img
                                 src={CHECKICON}
