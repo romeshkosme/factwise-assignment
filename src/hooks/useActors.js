@@ -36,6 +36,7 @@ function useActors() {
         })
         DB = [...updatedActors];
         setActors(updatedActors);
+        toast.success("Saved successfully!");
     }
 
     return {

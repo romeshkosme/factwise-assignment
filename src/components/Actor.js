@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { calculateAge, calculateDob } from "../utils/util";
+import { calculateAge, calculateDob, validate } from "../utils/util";
 import { GENDERS } from "../utils/Constant";
 import DELETEICON from "../assets/delete.svg";
 import EDITICON from "../assets/edit.svg";
@@ -10,6 +9,8 @@ import toast from 'react-hot-toast';
 function Actor({actor, edit, index, onChangeEdit, onHandleEditMode, onHandleSubmit, setDeleteModal, onHandleChangeForm}) {
 
     const onHandleSave = () => {
+        if (!validate(edit)) return;
+
         if (edit.edited) {
             const payload = {...edit};
             const {name} = payload;
@@ -22,36 +23,14 @@ function Actor({actor, edit, index, onChangeEdit, onHandleEditMode, onHandleSubm
             delete payload["edited"];
             delete payload["name"];
 
-            // console.log("payload - ", payload)
-
             onHandleSubmit(payload.id, payload);
             onChangeEdit(null);
-            toast.success("Edited successfully!")
 
         } else {
             toast.error("Nothing edited!")
         }
     }
 
-    const validate = () => {
-        console.log("age - ", actor)
-        // NAME
-        if (!actor?.name || !new RegExp(/^[a-zA-Z\s]*$/).test(actor["name"])) {
-            console.log("name required or invalid")
-        }
-        // AGE
-        if (!actor["age"] || !(new RegExp(/^\d+$/).test(actor["age"]))) {
-            console.log("invlid age");
-        }
-        // country
-        if (!actor["country"] || !new RegExp(/^[a-zA-Z\s]*$/).test(actor["country"])) {
-            console.log("invalid country");
-        }
-        // description
-        if (!actor["description"]) {
-            console.log("description required");
-        }
-    }
     return (
         <>
             <div className="actor-info-row input-row-one">

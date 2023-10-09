@@ -1,3 +1,5 @@
+import toast from "react-hot-toast";
+
 export const calculateAge = (dob) => {
     try {
         const currentDate = new Date();
@@ -27,4 +29,38 @@ export const calculateDob = (age) => {
         console.log(error);
         return new Date;
     }
+}
+
+export const validate = (payload) => {
+    // NAME
+    if (!payload?.name) {
+        toast.error("Name is required");
+        return false;
+    } else if (!new RegExp(/^[a-zA-Z\s]*$/).test(payload["name"])) {
+        toast.error("Invalid name!");
+        return false;
+    }
+    // AGE
+    if (!payload["age"]) {
+        toast.error("Age is required");
+        return false;
+    } else if (!(new RegExp(/^\d+$/).test(payload["age"]))) {
+        toast.error("Invalid age!");
+        return false;
+    }
+    // country
+    if (!payload["country"]) {
+        toast.error("Country is required");
+        return false;
+    } else if (!new RegExp(/^[a-zA-Z\s]*$/).test(payload["country"])) {
+        toast.error("Invalid country!");
+        return false;
+    }
+    // description
+    if (!payload["description"]) {
+        toast.error("Description is required");
+        return false;
+    }
+
+    return true;
 }
